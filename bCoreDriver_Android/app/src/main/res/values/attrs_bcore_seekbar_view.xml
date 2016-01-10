@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BcoreSeekBarView">
+        <attr name="vseekbarType" format="integer" />
+        <attr name="vseekbarIndex" format="integer" />
+        <attr name="vseekbarLableVisible" format="boolean" />
+    </declare-styleable>
+</resources>

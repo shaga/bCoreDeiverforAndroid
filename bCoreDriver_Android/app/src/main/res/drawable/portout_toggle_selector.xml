@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 選択時 -->
+    <item android:state_checked="true">
+        <layer-list>
+            <item android:bottom="6dp" android:top="6dp">
+                <shape android:shape="rectangle">
+                    <size android:height="35dp" android:width="50dp" />
+                    <corners android:radius="18dp" />
+                    <solid android:color="#ff0000" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
+    <!-- 未選択時 -->
+    <item>
+        <layer-list>
+            <item android:bottom="6dp" android:top="6dp">
+                <shape android:shape="rectangle">
+                    <size android:height="35dp" android:width="50dp" />
+                    <corners android:radius="18dp" />
+                    <solid android:color="#666666"/>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
+</selector>

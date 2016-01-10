@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="2dp"
+    android:gravity="center_horizontal"
+    >
+
+    <net.shaga_workshop.bcoredriverforandroid.views.controls.VSeekBar
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/bcore_vseekbar"
+        android:thumb="@drawable/my_seek_thumb"
+        android:background="@null"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1"
+        android:max="255"
+        android:progress="128"
+        />
+
+    <TextView
+        android:id="@+id/text_bcore_vseek_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_gravity="center_horizontal"
+        />
+
+</LinearLayout>

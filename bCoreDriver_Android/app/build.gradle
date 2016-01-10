@@ -1,0 +1,44 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'com.neenbedankt.android-apt'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
+
+    defaultConfig {
+        applicationId "net.shaga_workshop.bcoredriverforandroid"
+        minSdkVersion 18
+        targetSdkVersion 23
+        versionCode 2
+        versionName "1.0.1"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+apt {
+    arguments {
+        androidManifestFile variant.outputs[0].processResources.manifestFile
+    }
+}
+
+repositories {
+    maven { url 'http://shaga.github.com/bcore_lib/repository'}
+}
+
+dependencies {
+    apt 'net.cattaka:cathandsgendroid-apt:0.4.4'
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'net.shaga_workshop:bcore_lib:0.1.+'
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'com.android.support:gridlayout-v7:23.1.1'
+    compile 'com.android.support:design:23.1.1'
+    compile 'com.android.support:support-v4:23.1.1'
+    compile 'net.cattaka:cathandsgendroid-core:0.4.4'
+}

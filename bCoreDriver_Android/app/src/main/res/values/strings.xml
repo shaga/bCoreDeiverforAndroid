@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">bCore Driver for Android</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="btn_scan_start">SCAN START</string>
+    <string name="btn_scan_stop">SCAN STOP</string>
+
+    <string name="msg_disabled_bluetooth">Bluetooth is disable. Please set enable to Bluetooth.</string>
+
+    <string name="text_po0_name">PO1</string>
+    <string name="text_po1_name">PO2</string>
+    <string name="text_po2_name">PO3</string>
+    <string name="text_po3_name">PO4</string>
+
+    <string name="text_srv0_name">Srv1</string>
+    <string name="text_srv1_name">Srv2</string>
+    <string name="text_srv2_name">Srv3</string>
+    <string name="text_srv3_name">Srv4</string>
+
+    <string name="text_mot0_name">Mot1</string>
+    <string name="text_mot1_name">Mot2</string>
+    <string name="text_mot2_name">Mot3</string>
+    <string name="text_mot3_name">Mot4</string>
+
+    <string name="text_setting_show">Show:</string>
+    <string name="text_setting_flip">Flip:</string>
+    <string name="text_setting_sync">Sync:</string>
+    <string name="text_setting_trim">Trim:</string>
+
+    <string name="text_setting_name">bCore Display Name:</string>
+
+    <string name="text_battery_fmt">Battery: %d [mV]</string>
+
+    <string name="text_state_connecting">Connecting ...</string>
+    <string name="text_state_initializing">Initializing...</string>
+
+    <string name="msg_bcore_disconnected">Disconnected from bCore.</string>
+    <string name="msg_reset_bcore_settings">Reset to default value ?</string>
+
+    <string name="msg_set_bt_enable">Shutdown application because Bluetooth disabled.</string>
+    <string name="msg_use_permission_location">Shutdown application because not allowed Location Permission.</string>
+    <string name="msg_device_not_have_bcore_service">Connected device dose not have "bCore" service.</string>
+</resources>

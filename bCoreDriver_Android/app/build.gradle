@@ -7,7 +7,7 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "net.shaga_workshop.bcoredriverforandroid"
+        applicationId "net.shaga_workshop.cica_controller"
         minSdkVersion 18
         targetSdkVersion 23
         versionCode 2

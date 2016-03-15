@@ -1,4 +1,4 @@
-package net.shaga_workshop.bcoredriverforandroid.views.controls;
+package net.shaga_workshop.cica_controller.views.controls;
 
 import android.content.Context;
 import android.graphics.Canvas;

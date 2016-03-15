@@ -1,4 +1,4 @@
-package net.shaga_workshop.bcoredriverforandroid;
+package net.shaga_workshop.cica_controller;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -25,9 +25,9 @@ import android.widget.Toast;
 
 import net.shaga_workshop.bcore_lib.BcoreScanner;
 import net.shaga_workshop.bcore_lib.BcoreScannerListener;
-import net.shaga_workshop.bcoredriverforandroid.models.BcoreInfo;
-import net.shaga_workshop.bcoredriverforandroid.models.BcoreInfoCatHands;
-import net.shaga_workshop.bcoredriverforandroid.models.BcoreInfoOpenHelper;
+import net.shaga_workshop.cica_controller.models.BcoreInfo;
+import net.shaga_workshop.cica_controller.models.BcoreInfoCatHands;
+import net.shaga_workshop.cica_controller.models.BcoreInfoOpenHelper;
 
 import java.util.ArrayList;
 

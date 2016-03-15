@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">bCore Driver for Android</string>
+    <string name="app_name">CICA Controller for Android</string>
     <string name="action_settings">Settings</string>
 
     <string name="btn_scan_start">SCAN START</string>

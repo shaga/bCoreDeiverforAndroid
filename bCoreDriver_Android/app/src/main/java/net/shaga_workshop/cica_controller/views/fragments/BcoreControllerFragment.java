@@ -1,4 +1,4 @@
-package net.shaga_workshop.bcoredriverforandroid.views.fragments;
+package net.shaga_workshop.cica_controller.views.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -12,9 +12,9 @@ import android.widget.ToggleButton;
 
 import net.shaga_workshop.bcore_lib.BcoreConsts;
 import net.shaga_workshop.bcore_lib.BcoreValueUtil;
-import net.shaga_workshop.bcoredriverforandroid.R;
-import net.shaga_workshop.bcoredriverforandroid.views.controls.BcoreSeekBarView;
-import net.shaga_workshop.bcoredriverforandroid.models.BcoreInfo;
+import net.shaga_workshop.cica_controller.R;
+import net.shaga_workshop.cica_controller.views.controls.BcoreSeekBarView;
+import net.shaga_workshop.cica_controller.models.BcoreInfo;
 
 /**
  * A simple {@link Fragment} subclass.

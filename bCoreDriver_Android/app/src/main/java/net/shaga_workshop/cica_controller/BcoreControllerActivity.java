@@ -1,4 +1,4 @@
-package net.shaga_workshop.bcoredriverforandroid;
+package net.shaga_workshop.cica_controller;
 
 import android.app.AlertDialog;
 import android.app.FragmentManager;
@@ -24,11 +24,11 @@ import net.shaga_workshop.bcore_lib.BcoreControlService;
 import net.shaga_workshop.bcore_lib.BcoreInfoReceiver;
 import net.shaga_workshop.bcore_lib.BcoreInfoUpdateListener;
 import net.shaga_workshop.bcore_lib.BcoreValueUtil;
-import net.shaga_workshop.bcoredriverforandroid.views.fragments.BcoreControllerFragment;
-import net.shaga_workshop.bcoredriverforandroid.views.fragments.BcoreSettingFragment;
-import net.shaga_workshop.bcoredriverforandroid.models.BcoreInfo;
-import net.shaga_workshop.bcoredriverforandroid.models.BcoreInfoCatHands;
-import net.shaga_workshop.bcoredriverforandroid.models.BcoreInfoOpenHelper;
+import net.shaga_workshop.cica_controller.views.fragments.BcoreControllerFragment;
+import net.shaga_workshop.cica_controller.views.fragments.BcoreSettingFragment;
+import net.shaga_workshop.cica_controller.models.BcoreInfo;
+import net.shaga_workshop.cica_controller.models.BcoreInfoCatHands;
+import net.shaga_workshop.cica_controller.models.BcoreInfoOpenHelper;
 
 public class BcoreControllerActivity extends AppCompatActivity {
 

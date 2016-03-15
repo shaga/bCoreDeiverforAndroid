@@ -1,4 +1,4 @@
-package net.shaga_workshop.bcoredriverforandroid.views.controls;
+package net.shaga_workshop.cica_controller.views.controls;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -11,7 +11,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import net.shaga_workshop.bcore_lib.BcoreConsts;
-import net.shaga_workshop.bcoredriverforandroid.R;
+import net.shaga_workshop.cica_controller.R;
 
 /**
  * Custom View within Vertical SeekBar and TextView for Label

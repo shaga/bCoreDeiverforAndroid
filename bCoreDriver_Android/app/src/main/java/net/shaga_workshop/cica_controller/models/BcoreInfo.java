@@ -1,4 +1,4 @@
-package net.shaga_workshop.bcoredriverforandroid.models;
+package net.shaga_workshop.cica_controller.models;
 
 import android.view.View;
 

@@ -6,7 +6,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -25,9 +24,6 @@ import android.widget.Toast;
 
 import net.shaga_workshop.bcore_lib.BcoreScanner;
 import net.shaga_workshop.bcore_lib.BcoreScannerListener;
-import net.shaga_workshop.cica_controller.models.BcoreInfo;
-import net.shaga_workshop.cica_controller.models.BcoreInfoCatHands;
-import net.shaga_workshop.cica_controller.models.BcoreInfoOpenHelper;
 
 import java.util.ArrayList;
 
@@ -109,15 +105,9 @@ public class MainActivity extends AppCompatActivity {
     private BcoreAdapter bcoreAdapter;
     private ArrayList<DeviceInfo> advertisingBcoreInfos;
 
-    private SQLiteDatabase boreInfoDB;
-
     private BcoreScannerListener bcoreScannerListener = new BcoreScannerListener() {
         @Override
         public void onFoundBcore(String name, String addr) {
-
-            BcoreInfo info  = BcoreInfoCatHands.findByDeviceAddr(boreInfoDB, addr);
-            if (info != null) name = info.getDisplayName();
-
             DeviceInfo devInfo = new DeviceInfo(name, addr);
             if (!advertisingBcoreInfos.contains(devInfo)) {
                 advertisingBcoreInfos.add(devInfo);
@@ -158,9 +148,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        BcoreInfoOpenHelper helper = new BcoreInfoOpenHelper(getApplicationContext());
-        boreInfoDB = helper.getWritableDatabase();
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

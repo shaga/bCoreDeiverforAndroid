@@ -1,20 +1,16 @@
 package net.shaga_workshop.cica_controller.views.fragments;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import net.shaga_workshop.bcore_lib.BcoreConsts;
-import net.shaga_workshop.bcore_lib.BcoreValueUtil;
 import net.shaga_workshop.cica_controller.R;
 import net.shaga_workshop.cica_controller.views.controls.BcoreSeekBarView;
-import net.shaga_workshop.cica_controller.models.BcoreInfo;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,30 +52,9 @@ public class BcoreControllerFragment extends Fragment {
     private BcoreSeekBarView[] mServoSeekBars = new BcoreSeekBarView[BcoreConsts.MAX_SERVO_COUNT];
     private ToggleButton[] mPortOutToggles = new ToggleButton[BcoreConsts.MAX_PORT_COUNT];
     private TextView mBatteryText;
-    private byte[] mBcoreFunctions;
     private int mBatteryValue;
     private String mBatteryFmt;
     private OnBcoreControllerListener mListener;
-    private BcoreInfo mBcoreInfo;
-
-    private CompoundButton.OnCheckedChangeListener mOnCheckedChanged = new CompoundButton.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            int idx = 0;
-            for (int i = 0; i < BcoreConsts.MAX_PORT_COUNT; i++) {
-                if (PORT_OUT_RES_IDS[i] == buttonView.getId()) {
-                    idx = i;
-                    break;
-                }
-            }
-
-            if (idx == BcoreConsts.MAX_PORT_COUNT) return;
-
-            if (mListener != null) {
-                mListener.setPortOut(idx, isChecked);
-            }
-        }
-    };
 
     private BcoreSeekBarView.BcoreSeekViewListener mSeekViewListener = new BcoreSeekBarView.BcoreSeekViewListener() {
         @Override
@@ -91,9 +66,6 @@ public class BcoreControllerFragment extends Fragment {
 
         @Override
         public void UpdateServoValue(int idx, int value) {
-            if (mListener != null) {
-                mListener.setServoPos(idx, value);
-            }
         }
     };
 
@@ -121,7 +93,7 @@ public class BcoreControllerFragment extends Fragment {
 
         for (int i = 0; i < BcoreConsts.MAX_MOTOR_COUNT; i++) {
             mMotorSeekBars[i] = (BcoreSeekBarView) view.findViewById(MOTOR_RES_IDS[i]);
-            if (BcoreValueUtil.isEnabledMotorIdx(mBcoreFunctions, i)) {
+            if (i == 0 || i == 1) {
                 mMotorSeekBars[i].setVisibility(View.VISIBLE);
             } else {
                 mMotorSeekBars[i].setVisibility(View.GONE);
@@ -131,22 +103,12 @@ public class BcoreControllerFragment extends Fragment {
 
         for (int i = 0; i < BcoreConsts.MAX_SERVO_COUNT; i++) {
             mServoSeekBars[i] = (BcoreSeekBarView) view.findViewById(SERVO_RES_IDS[i]);
-            if (BcoreValueUtil.isEnabledServoIdx(mBcoreFunctions, i)) {
-                mServoSeekBars[i].setVisibility(View.VISIBLE);
-            } else {
-                mServoSeekBars[i].setVisibility(View.INVISIBLE);
-            }
-            mServoSeekBars[i].setBcoreSeekBarViewListener(mSeekViewListener);
+            mServoSeekBars[i].setVisibility(View.INVISIBLE);
         }
 
         for (int i = 0; i < BcoreConsts.MAX_PORT_COUNT; i++) {
             mPortOutToggles[i] = (ToggleButton) view.findViewById(PORT_OUT_RES_IDS[i]);
-            if (BcoreValueUtil.isEnabledPortIdx(mBcoreFunctions, i)) {
-                mPortOutToggles[i].setVisibility(View.VISIBLE);
-            } else {
-                mPortOutToggles[i].setVisibility(View.INVISIBLE);
-            }
-            mPortOutToggles[i].setOnCheckedChangeListener(mOnCheckedChanged);
+            mPortOutToggles[i].setVisibility(View.INVISIBLE);
         }
 
         mBatteryFmt = getActivity().getString(R.string.text_battery_fmt);
@@ -155,56 +117,12 @@ public class BcoreControllerFragment extends Fragment {
             mBatteryText.setText(String.format(mBatteryFmt, mBatteryValue));
         }
 
-        updateVisibility();
-
         return view;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //mListener = null;
-    }
-
-    public void setBcoreInfo(BcoreInfo info) {
-        mBcoreInfo = info;
-
-        updateVisibility();
-    }
-
-    public void updateVisibility() {
-        Activity activity = getActivity();
-
-        if (activity == null || mBcoreFunctions == null) return;
-
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < BcoreConsts.MAX_MOTOR_COUNT && BcoreValueUtil.hasEnableMotor(mBcoreFunctions); i++) {
-                    if (mMotorSeekBars[i] == null ||!BcoreValueUtil.isEnabledMotorIdx(mBcoreFunctions, i)) {
-                        continue;
-                    }
-
-                    mMotorSeekBars[i].setVisibility(mBcoreInfo.getIsShowMotor(i) ? View.VISIBLE : View.INVISIBLE);
-                }
-
-                for (int i = 0; i < BcoreConsts.MAX_SERVO_COUNT && BcoreValueUtil.hasEnableServo(mBcoreFunctions); i++) {
-                    if (mServoSeekBars[i] == null || !BcoreValueUtil.isEnabledServoIdx(mBcoreFunctions, i)) continue;
-
-                    mServoSeekBars[i].setVisibility(mBcoreInfo.getIsShowServo(i) ? View.VISIBLE : View.INVISIBLE);
-
-                    if (mBcoreInfo.getIsShowServo(i)) {
-                        mServoSeekBars[i].setEnabled(!mBcoreInfo.getIsSyncServo(i));
-                    }
-                }
-
-                for (int i = 0; i < BcoreConsts.MAX_PORT_COUNT && BcoreValueUtil.hasEnablePortOut(mBcoreFunctions); i++) {
-                    if (mPortOutToggles[i] == null || !BcoreValueUtil.isEnabledPortIdx(mBcoreFunctions, i)) continue;
-
-                    mPortOutToggles[i].setVisibility(mBcoreInfo.getIsShowPortOut(i) ? View.VISIBLE : View.INVISIBLE);
-                }
-            }
-        });
     }
 
     public int getServoCurrentValue(int idx) {
@@ -216,8 +134,6 @@ public class BcoreControllerFragment extends Fragment {
     }
 
     public void setBcoreFunctions(byte[] functions) {
-        mBcoreFunctions = functions;
-        updateVisibility();
     }
 
     public void setListener (OnBcoreControllerListener listener) {

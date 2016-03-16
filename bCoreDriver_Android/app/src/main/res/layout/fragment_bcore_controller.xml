@@ -13,14 +13,14 @@
         android:id="@+id/motor_layout_left"
         >
 
-        <net.shaga_workshop.bcoredriverforandroid.views.controls.BcoreSeekBarView
+        <net.shaga_workshop.cica_controller.views.controls.BcoreSeekBarView
             android:id="@+id/vseek_mot0"
             style="@style/ControlVSeekBase"
             app:vseekbarType="@integer/seekbarview_type_motor"
             app:vseekbarIndex="0"
             />
 
-        <net.shaga_workshop.bcoredriverforandroid.views.controls.BcoreSeekBarView
+        <net.shaga_workshop.cica_controller.views.controls.BcoreSeekBarView
             android:id="@+id/vseek_mot2"
             style="@style/ControlVSeekBase"
             app:vseekbarType="@integer/seekbarview_type_motor"
@@ -50,30 +50,31 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:layout_weight="1"
+            android:visibility="gone"
             >
 
-            <net.shaga_workshop.bcoredriverforandroid.views.controls.BcoreSeekBarView
+            <net.shaga_workshop.cica_controller.views.controls.BcoreSeekBarView
                 style="@style/ControlVSeekBase"
                 app:vseekbarType="@integer/seekbarview_type_servo"
                 android:id="@+id/vseek_srv0"
                 app:vseekbarIndex="0"
                 />
 
-            <net.shaga_workshop.bcoredriverforandroid.views.controls.BcoreSeekBarView
+            <net.shaga_workshop.cica_controller.views.controls.BcoreSeekBarView
                 style="@style/ControlVSeekBase"
                 app:vseekbarType="@integer/seekbarview_type_servo"
                 android:id="@+id/vseek_srv1"
                 app:vseekbarIndex="1"
                 />
 
-            <net.shaga_workshop.bcoredriverforandroid.views.controls.BcoreSeekBarView
+            <net.shaga_workshop.cica_controller.views.controls.BcoreSeekBarView
                 style="@style/ControlVSeekBase"
                 app:vseekbarType="@integer/seekbarview_type_servo"
                 android:id="@+id/vseek_srv2"
                 app:vseekbarIndex="2"
                 />
 
-            <net.shaga_workshop.bcoredriverforandroid.views.controls.BcoreSeekBarView
+            <net.shaga_workshop.cica_controller.views.controls.BcoreSeekBarView
                 style="@style/ControlVSeekBase"
                 app:vseekbarType="@integer/seekbarview_type_servo"
                 android:id="@+id/vseek_srv3"
@@ -87,6 +88,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_horizontal"
+            android:visibility="gone"
             >
 
             <ToggleButton
@@ -122,6 +124,17 @@
 
         </LinearLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/deer"/>
+        </RelativeLayout>
+
     </LinearLayout>
 
 
@@ -130,14 +143,14 @@
         android:id="@+id/motor_layout_right"
         >
 
-        <net.shaga_workshop.bcoredriverforandroid.views.controls.BcoreSeekBarView
+        <net.shaga_workshop.cica_controller.views.controls.BcoreSeekBarView
             android:id="@+id/vseek_mot3"
             style="@style/ControlVSeekBase"
             app:vseekbarType="@integer/seekbarview_type_motor"
             app:vseekbarIndex="3"
             />
 
-        <net.shaga_workshop.bcoredriverforandroid.views.controls.BcoreSeekBarView
+        <net.shaga_workshop.cica_controller.views.controls.BcoreSeekBarView
             android:id="@+id/vseek_mot1"
             style="@style/ControlVSeekBase"
             app:vseekbarType="@integer/seekbarview_type_motor"

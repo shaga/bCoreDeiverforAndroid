@@ -42,7 +42,7 @@ public class BcoreSeekBarView extends LinearLayout {
 
     private int mType;
     private int mIndex;
-
+    private TextView mTextType;
     private VSeekBar mVSeekBar;
 
     private BcoreSeekViewListener mListener;
@@ -102,7 +102,7 @@ public class BcoreSeekBarView extends LinearLayout {
 
         View view = LayoutInflater.from(getContext()).inflate(R.layout.view_bcore_seekbar, this);
 
-        TextView textType = (TextView) view.findViewById(R.id.text_bcore_vseek_type);
+        mTextType = (TextView) view.findViewById(R.id.text_bcore_vseek_type);
 
         // Load attributes
         final TypedArray a = getContext().obtainStyledAttributes(
@@ -120,11 +120,18 @@ public class BcoreSeekBarView extends LinearLayout {
         Drawable seekBarProgressDrawable;
         if (mType == typeServo) {
             if (mIndex < 0 || BcoreConsts.MAX_SERVO_COUNT <= mIndex) mIndex = 0;
-            textType.setText(SERVO_STRING_IDS[mIndex]);
+            mTextType.setText(SERVO_STRING_IDS[mIndex]);
             seekBarProgressDrawable = getContext().getResources().getDrawable(R.drawable.my_seek_selector_blue);
         } else {
             if (mIndex < 0 || BcoreConsts.MAX_MOTOR_COUNT <= mIndex) mIndex = 0;
-            textType.setText(MOTOR_STRING_IDS[mIndex]);
+            if (mIndex == 0)
+            {
+                mTextType.setText("LEFT");
+            } else if (mIndex == 1) {
+                mTextType.setText("RIGHT");
+            } else {
+                mTextType.setText(MOTOR_STRING_IDS[mIndex]);
+            }
             seekBarProgressDrawable = getContext().getResources().getDrawable(R.drawable.my_seek_selector_red);
             mVSeekBar.setAutoReset(true, BcoreConsts.MOTOR_STOP_VALUE);
         }
@@ -135,7 +142,7 @@ public class BcoreSeekBarView extends LinearLayout {
         boolean isVisible = a.getBoolean(R.styleable.BcoreSeekBarView_vseekbarLableVisible, true);
 
         if (!isVisible) {
-            textType.setVisibility(GONE);
+            mTextType.setVisibility(GONE);
         }
 
         a.recycle();

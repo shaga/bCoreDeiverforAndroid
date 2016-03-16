@@ -25,10 +25,6 @@ import net.shaga_workshop.bcore_lib.BcoreInfoReceiver;
 import net.shaga_workshop.bcore_lib.BcoreInfoUpdateListener;
 import net.shaga_workshop.bcore_lib.BcoreValueUtil;
 import net.shaga_workshop.cica_controller.views.fragments.BcoreControllerFragment;
-import net.shaga_workshop.cica_controller.views.fragments.BcoreSettingFragment;
-import net.shaga_workshop.cica_controller.models.BcoreInfo;
-import net.shaga_workshop.cica_controller.models.BcoreInfoCatHands;
-import net.shaga_workshop.cica_controller.models.BcoreInfoOpenHelper;
 
 public class BcoreControllerActivity extends AppCompatActivity {
 
@@ -40,15 +36,8 @@ public class BcoreControllerActivity extends AppCompatActivity {
     private String mBcoreAddr;
 
     private BcoreControllerFragment mControllerFragment;
-    private BcoreSettingFragment mSettingFragment;
     private BcoreControlService mService;
     private TextView mTextState;
-
-    private SQLiteDatabase mBcoreInfoDB;
-
-    private BcoreInfo mBcoreInfo;
-
-    private boolean mIsShowSetting;
 
     private BcoreInfoUpdateListener bcoreInfoUpdateListener = new BcoreInfoUpdateListener() {
         @Override
@@ -76,10 +65,6 @@ public class BcoreControllerActivity extends AppCompatActivity {
         public void onDiscoveredService(boolean isDiscovered) {
             if (isDiscovered) {
                 mService.readFunctions();
-                for (int i = 0; i < BcoreConsts.MAX_SERVO_COUNT; i++) {
-                    int trim = mBcoreInfo.getTrimServo(i);
-                    if (trim != 0) updateServoPosTrim(i);
-                }
             } else {
                 // bCoreサービスが見つからないので切断して終了する。
                 runOnUiThread(new Runnable() {
@@ -100,14 +85,11 @@ public class BcoreControllerActivity extends AppCompatActivity {
 
         @Override
         public void onReadBcoreFunctions(byte[] value) {
-            mControllerFragment.setBcoreFunctions(value);
-            mSettingFragment.setFunctions(value);
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
                     transaction.show(mControllerFragment);
-                    transaction.hide(mSettingFragment);
                     transaction.commit();
                     mTextState.setVisibility(View.GONE);
                 }
@@ -142,14 +124,8 @@ public class BcoreControllerActivity extends AppCompatActivity {
 
         @Override
         public void setServoPos(int idx, int pos) {
-            if (!mBcoreInfo.getIsSyncServo(idx)) {
-                BcoreControllerActivity.this.setServoPos(idx, pos);
-            }
-
             if (idx == 0) {
                 for (int i = 0; i < BcoreConsts.MAX_MOTOR_COUNT; i++) {
-                    if (!mBcoreInfo.getIsSyncServo(i)) continue;
-
                     BcoreControllerActivity.this.setServoPos(i, pos);
                 }
             }
@@ -171,46 +147,13 @@ public class BcoreControllerActivity extends AppCompatActivity {
         }
     };
 
-    private BcoreSettingFragment.OnSettingUpdateListener mSettingUpdateListener = new BcoreSettingFragment.OnSettingUpdateListener() {
-        @Override
-        public void onUpdatedBcoreInfo() {
-            if (!mBcoreInfo.getDisplayName().equals(mBcoreName)) {
-                mBcoreName = mBcoreInfo.getDisplayName();
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        getSupportActionBar().setTitle(mBcoreInfo.getDisplayName());
-                    }
-                });
-            }
-            mControllerFragment.updateVisibility();
-
-            for (int i = 0; i < BcoreConsts.MAX_SERVO_COUNT; i++) {
-                updateServoPosTrim(i);
-            }
-
-            BcoreInfoCatHands.update(mBcoreInfoDB, mBcoreInfo);
-        }
-    };
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        BcoreInfoOpenHelper helper = new BcoreInfoOpenHelper(getApplicationContext());
-        mBcoreInfoDB = helper.getWritableDatabase();
-
         mBcoreName = getIntent().getExtras().getString(KEY_BCORE_NAME);
         mBcoreAddr = getIntent().getExtras().getString(KEY_BCORE_ADDR);
-
-        mBcoreInfo = BcoreInfoCatHands.findByDeviceAddr(mBcoreInfoDB, mBcoreAddr);
-
-        if (mBcoreInfo == null) {
-            mBcoreInfo = new BcoreInfo(mBcoreName, mBcoreAddr);
-            BcoreInfoCatHands.insert(mBcoreInfoDB, mBcoreInfo);
-        }
 
         setContentView(R.layout.activity_bcore_controller);
 
@@ -231,17 +174,10 @@ public class BcoreControllerActivity extends AppCompatActivity {
 
         mControllerFragment = BcoreControllerFragment.newInstance();
         mControllerFragment.setListener(mFragmentControlListener);
-        mControllerFragment.setBcoreInfo(mBcoreInfo);
-
-        mSettingFragment = BcoreSettingFragment.newInstance();
-        mSettingFragment.setBcoreInfo(mBcoreInfo);
-        mSettingFragment.setOnSettingUpdateListener(mSettingUpdateListener);
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.add(R.id.controller_frame, mControllerFragment);
         transaction.hide(mControllerFragment);
-        transaction.add(R.id.controller_frame, mSettingFragment);
-        transaction.hide(mSettingFragment);
         transaction.commit();
     }
 
@@ -280,11 +216,6 @@ public class BcoreControllerActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mIsShowSetting) {
-            getMenuInflater().inflate(R.menu.menu_controller, menu);
-        } else {
-            getMenuInflater().inflate(R.menu.menu_setting, menu);
-        }
         return true;
     }
 
@@ -293,35 +224,7 @@ public class BcoreControllerActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (!mIsShowSetting) {
-                    finish();
-                } else {
-                    switchFragment(false);
-                }
-                return false;
-            case R.id.controller_menu_setting:
-                if (!mControllerFragment.isHidden())
-                    switchFragment(true);
-                return false;
-            case R.id.menu_setting_reset:
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.app_name);
-                builder.setMessage(R.string.msg_reset_bcore_settings);
-                builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mBcoreInfo.reset();
-                        mSettingFragment.setControlValue();
-                        mControllerFragment.updateVisibility();
-                        for (int i = 0; i < BcoreConsts.MAX_SERVO_COUNT; i++) {
-                            updateServoPosTrim(i);
-                        }
-                    }
-                });
-                builder.setNegativeButton(android.R.string.no, null);
-                builder.setCancelable(true);
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                finish();
                 return false;
         }
 
@@ -330,54 +233,18 @@ public class BcoreControllerActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (mIsShowSetting) {
-            switchFragment(false);
-            return;
-        }
 
         super.onBackPressed();
-    }
-
-    private void switchFragment(boolean isShowSetting) {
-         if (mIsShowSetting == isShowSetting) return;
-
-        mIsShowSetting = isShowSetting;
-
-        FragmentManager manager = getFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        if (mIsShowSetting) {
-            transaction.hide(mControllerFragment);
-            transaction.show(mSettingFragment);
-        } else {
-            transaction.hide(mSettingFragment);
-            transaction.show(mControllerFragment);
-        }
-        transaction.commit();
-
-        manager.invalidateOptionsMenu();
     }
 
     private void setMotorSpeed(int idx, int value) {
         if (mService == null) return;
 
-        byte data = BcoreValueUtil.convertMotorValue(value, mBcoreInfo.getIsFlipMotor(idx));
+        byte data = BcoreValueUtil.convertMotorValue(value, false);
 
         mService.writeMotorPwm((byte) idx, data);
     }
 
     private void setServoPos(int idx, int value) {
-        if (mService == null) return;
-
-        byte data = BcoreValueUtil.convertServoValue(value, mBcoreInfo.getIsFlipServo(idx), mBcoreInfo.getTrimServo(idx));
-
-        mService.writeServoPos(idx, data);
-    }
-
-    private void updateServoPosTrim(int idx) {
-        if (mService == null) return;
-
-        int value = mControllerFragment.getServoCurrentValue(idx);
-
-        setServoPos(idx, value);
     }
 }

@@ -360,7 +360,7 @@ public class BcoreControllerActivity extends AppCompatActivity {
     private void setMotorSpeed(int idx, int value) {
         if (mService == null) return;
 
-        byte data = BcoreValueUtil.convertMotorValue(value, mBcoreInfo.getIsFlipMotor(idx));
+        byte data = BcoreValueUtil.convertMotorValue(value, !mBcoreInfo.getIsFlipMotor(idx));
 
         mService.writeMotorPwm((byte) idx, data);
     }
@@ -368,7 +368,7 @@ public class BcoreControllerActivity extends AppCompatActivity {
     private void setServoPos(int idx, int value) {
         if (mService == null) return;
 
-        byte data = BcoreValueUtil.convertServoValue(value, mBcoreInfo.getIsFlipServo(idx), mBcoreInfo.getTrimServo(idx));
+        byte data = BcoreValueUtil.convertServoValue(value, !mBcoreInfo.getIsFlipServo(idx), mBcoreInfo.getTrimServo(idx));
 
         mService.writeServoPos(idx, data);
     }
